@@ -1,0 +1,21 @@
+/* src/components/Grid/index.css */
+
+.grid-container {
+    overflow-x: auto;
+}
+
+.grid-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.grid-table th,
+.grid-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.grid-table th {
+    background-color: #f2f2f2;
+}

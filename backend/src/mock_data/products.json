@@ -1,0 +1,22 @@
+[
+    {
+      "productId": 1,
+      "productName": "Product 1",
+      "productOwnerName": "Owner 1",
+      "Developers": ["Developer 1", "Developer 2"],
+      "scrumMasterName": "Scrum Master 1",
+      "startDate": "2023/10/10",
+      "methodology": "Agile",
+      "location": "Location 1"
+    },
+    {
+      "productId": 2,
+      "productName": "Product 2",
+      "productOwnerName": "Owner 2",
+      "Developers": ["Developer 3", "Developer 4", "Developer 5"],
+      "scrumMasterName": "Scrum Master 2",
+      "startDate": "2023/10/15",
+      "methodology": "Scrum",
+      "location": "Location 2"
+    }
+  ]
