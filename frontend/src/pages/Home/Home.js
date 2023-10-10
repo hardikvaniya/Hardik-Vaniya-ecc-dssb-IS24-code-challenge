@@ -1,30 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '../../components/Grid/Grid'; // Import the Grid component
 import { fetchData } from '../../apis/products';
 import './Home.css'; // Import any styles for your Home component
-
-
-
-
+import AddProductForm from '../../components/AddProductForm/AddProductForm';
 
 function Home() {
-    // const columnNames = ['productId', 'productName', 'productOwnerName'];
-    const [products, setProducts] = React.useState([]);
-    const [columnNames, setColumnNames] = React.useState([]);
-    // const [counter, setCounter] = React.useState(0);
+    const [products, setProducts] = useState([]);
+    const [columnNames, setColumnNames] = useState([]);
+    const [isModalOpen, setModalOpen] = useState(false); // State to control the modal visibility
 
-    // // Function to increment the counter
-    // const incrementCounter = () => {
-    //     setCounter(counter + 1);
-    // };
-    // Fetch data from http://localhost:5000/api/products
     React.useEffect(() => {
         async function fetchProductData() {
             try {
                 const data = await fetchData();
 
                 if (data) {
-                    // Extract column names from the first item in the array
                     if (Array.isArray(data) && data.length > 0) {
                         const firstProduct = data[0];
                         const columns = Object.keys(firstProduct);
@@ -37,22 +27,44 @@ function Home() {
                     console.error('Data retrieval failed.');
                 }
             } catch (error) {
-                console.error('Error fetching data:', error.message); // Use error.message to display the error message
-                // Handle the error or inform the user
+                console.error('Error fetching data:', error.message);
             }
         }
         console.log('Fetching data...');
         fetchProductData();
     }, []);
 
+    // Function to open the modal
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    // Function to close the modal
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <div>
-            <h1>Welcome to the Home Page</h1>
-            <p>This is the home page of your React app.</p>
-            
-            <Grid data={products} columns={columnNames} /> 
-            {/* <p>Counter: {counter}</p>
-            <button onClick={incrementCounter}>Increment Counter</button> */}
+            <div className='summary'>
+                <h1>Welcome to the Home Page</h1>
+                <p>This is the home page of your React app.</p>
+                <button className='add-product-button' onClick={openModal}>Add Product</button>
+            </div>
+            <Grid data={products} columns={columnNames} multiValueCols={['Developers']} /> 
+
+            {/* Render the modal when isModalOpen is true */}
+            {isModalOpen && (
+                <div className='modal-overlay'>
+                    <div className='modal-content'>
+                        <div>
+                            <AddProductForm/>
+                        </div>
+                        {/* Add your form or content for adding a product here */}
+                        <button onClick={closeModal}>Close</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

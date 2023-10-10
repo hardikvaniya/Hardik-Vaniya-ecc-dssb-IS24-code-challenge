@@ -2,20 +2,46 @@
 
 .grid-container {
     overflow-x: auto;
+    max-height: calc(100vh - 180px); /* Adjust the 230px to match your header/footer height */
 }
 
 .grid-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    table-layout: fixed;
+    border-spacing: 0px
+    /* Use fixed table layout to control column widths */
 }
 
-.grid-table th,
-.grid-table td {
+.grid-table td,
+.grid-table th{
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    overflow: hidden;
 }
 
 .grid-table th {
     background-color: #f2f2f2;
+    position: sticky;
+    top: 0; /* Stick the <thead> to the top of the container */
+    z-index: 0; /* Ensure it's above the table body */
 }
+
+/* Style the multi-value cells */
+.multi-value-cell {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow multiple blocks to wrap within the cell */
+}
+
+/* Style the blocks within the multi-value cells */
+.block-item {
+    background-color: #f2f2f2;
+    border: 1px solid #cccccc; 
+    padding: 4px;
+    margin: 2px;
+    white-space: nowrap;
+    /* Prevent text from wrapping within blocks */
+}
+ 
