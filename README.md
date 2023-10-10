@@ -24,8 +24,11 @@ npm@9.8.1
 - Add Test cases
 - What should be best location of swagger.js file
 - Ask Aryan - what is reportWebVitals.js should it be removed?
+- Content.js (increment number in react)
+
 # Backend run
 cd backend && node server.js
 
 # Frontend run
+npm start
 
