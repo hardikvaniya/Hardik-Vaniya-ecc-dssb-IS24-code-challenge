@@ -1,6 +1,34 @@
 const fs = require('fs');
 const path = require('path');
 
+const JSON_FILE_PATH = path.join(__dirname, '../mock_data/products.json');
+
+function readJsonFile(filePath) {
+    try {
+        const rawData = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(rawData);
+    } catch (error) {
+        console.error('Error reading JSON file:', error);
+        return null;
+    }
+}
+
+function writeJsonFile(filePath, data) {
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    } catch (error) {
+        console.error('Error writing to JSON file:', error);
+    }
+}
+
+function readProductsFromFile() {
+    return readJsonFile(JSON_FILE_PATH) || [];
+}
+
+function writeProductsToFile(data) {
+    writeJsonFile(JSON_FILE_PATH, data);
+}
+
 function getAllProducts() {
   // Define the path to the product.json file
   const productFilePath = path.join(__dirname, '..', 'mock_data', 'products.json');
@@ -19,5 +47,7 @@ function getAllProducts() {
 
 
 module.exports = {
-    getAllProducts
+    getAllProducts,
+    readProductsFromFile,
+    writeProductsToFile
 };

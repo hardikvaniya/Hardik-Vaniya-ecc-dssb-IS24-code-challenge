@@ -1,16 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-function readProductsFromFile() {
-    const filePath = path.join(__dirname, '../mock_data/products.json');
-    const rawData = fs.readFileSync(filePath);
-    return JSON.parse(rawData);
-}
-
-function writeProductsToFile(data) {
-    const filePath = path.join(__dirname, '../mock_data/products.json');
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
+const { readProductsFromFile, writeProductsToFile} = require('./products.js'); 
 
 function addProductToFile(productName, productOwnerName, developers, scrumMasterName, startDate, methodology, location) {
     const data = readProductsFromFile();
@@ -47,6 +35,30 @@ function addProductToFile(productName, productOwnerName, developers, scrumMaster
     return data;
 }
 
+function updateProductInFile(productId, updatedFields) {
+    const data = readProductsFromFile();
+
+    // Find the product by productId
+    const productIndex = data.findIndex((product) => product.productId === productId);
+
+    if (productIndex === -1) {
+        // If the product doesn't exist, return a 404 response
+        return null;
+    }
+
+    // Merge the updated fields with the existing product data
+    data[productIndex] = {
+        ...data[productIndex],
+        ...updatedFields
+    };
+
+    // Write the updated data back to the JSON file
+    writeProductsToFile(data);
+
+    return data[productIndex];
+}
+
 module.exports = {
-    addProductToFile
+    addProductToFile,
+    updateProductInFile,
 };
