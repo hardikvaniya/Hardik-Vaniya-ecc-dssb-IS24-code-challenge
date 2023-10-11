@@ -20,4 +20,27 @@ export async function addProduct(data) {
     }
 
 }
-  
+
+export async function updateProduct(productId, updatedData) {
+    const url = `http://localhost:5000/api/product/${productId}`;
+
+    // Make a PUT request and handle errors using the try/catch block
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(updatedData),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating product:', error.message);
+    }
+}

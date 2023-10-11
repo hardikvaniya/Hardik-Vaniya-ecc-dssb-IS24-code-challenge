@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import { updateProduct } from '../../apis/product';
 
-function EditProductForm({ productData, onSave, onClose }) {
+function EditProductForm({ productData, fetchProductData, closeModal }) {
     const [editedData, setEditedData] = useState({ ...productData });
 
     const handleFieldChange = (e, field, index) => {
         const { value } = e.target;
-    
+
         if (field === 'Developers') {
-            const updatedDevelopers = [...editedData.Developers];
-    
+            const updatedDevelopers = [...editedData.developers];
+
             if (index >= 0 && index < updatedDevelopers.length) {
                 // Edit an existing developer name
                 updatedDevelopers[index] = value;
@@ -16,10 +17,10 @@ function EditProductForm({ productData, onSave, onClose }) {
                 // Add a new developer name if there are less than 5
                 updatedDevelopers.push(value);
             }
-    
+
             setEditedData((prevState) => ({
                 ...prevState,
-                Developers: updatedDevelopers,
+                developers: updatedDevelopers,
             }));
         } else {
             setEditedData((prevState) => ({
@@ -29,9 +30,31 @@ function EditProductForm({ productData, onSave, onClose }) {
         }
     };
 
-    const handleSaveClick = () => {
-        onSave(editedData);
-        onClose();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Call the addProduct function with the formData
+            const result = await updateProduct(editedData.productId, editedData);
+    
+            if (result) {
+                // If the product was added successfully, you can handle the result
+                // You can display a success message or navigate to a different page
+                console.log('Product updated successfully:', result);
+
+                // Fetch the updated product data
+                fetchProductData();
+
+                // Call the closeModal function to close the modal
+                closeModal();
+
+                alert('Product updated successfully!')
+            } else {
+                // Handle the case where adding the product failed
+                console.error('Product addition failed.');
+            }
+        } catch (error) {
+            console.error('Error adding product:', error.message);
+        }
     };
 
     return (
@@ -55,8 +78,8 @@ function EditProductForm({ productData, onSave, onClose }) {
             </div>
             <div>
                 <label>Developers:</label>
-                {Array.isArray(editedData.Developers) ? (
-                    editedData.Developers.map((developer, index) => (
+                {Array.isArray(editedData.developers) ? (
+                    editedData.developers.map((developer, index) => (
                         <input
                             key={index}
                             type="text"
@@ -67,7 +90,7 @@ function EditProductForm({ productData, onSave, onClose }) {
                 ) : (
                     <input
                         type="text"
-                        value={editedData.Developers}
+                        value={editedData.developers}
                         onChange={(e) => handleFieldChange(e, 'Developers')}
                     />
                 )}
@@ -106,8 +129,8 @@ function EditProductForm({ productData, onSave, onClose }) {
                     onChange={(e) => handleFieldChange(e, 'location')}
                 />
             </div>
-            <button onClick={handleSaveClick}>Save</button>
-            <button onClick={onClose}>Cancel</button>
+            <button onClick={handleSubmit}>Save</button>
+            <button onClick={closeModal}>Cancel</button>
         </div>
     );
 }

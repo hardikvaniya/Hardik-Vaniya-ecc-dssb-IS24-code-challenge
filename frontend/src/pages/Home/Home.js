@@ -8,9 +8,9 @@ import EditProductForm from '../../components/EditProductForm/EditProductForm';
 function Home() {
     const [products, setProducts] = useState([]);
     const [columnNames, setColumnNames] = useState([]);
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [isAddModalOpen, setAddModalOpen] = useState(false); 
     const [selectedRow, setSelectedRow] = useState(null); // Store the selected row data
-    const [isEditOpen, setEditOpen] = useState(false); // State to control the edit modal visibility
+    const [isEditModalOpen, setEditModalOpen] = useState(false); // State to control the edit modal visibility
 
     async function fetchProductData() {
         try {
@@ -40,34 +40,25 @@ function Home() {
 
     // Function to open the add product modal
     const openModal = () => {
-        setModalOpen(true);
+        setAddModalOpen(true);
     };
 
     // Function to close the add product modal
     const closeModal = () => {
-        setModalOpen(false);
+        setAddModalOpen(false);
+        setEditModalOpen(false);
     };
 
     // Function to open the edit modal
     const openEditModal = (row) => {
         setSelectedRow(row);
-        setEditOpen(true);
+        setEditModalOpen(true);
     };
 
     // Function to close the edit modal
     const closeEditModal = () => {
-        setEditOpen(false);
+        setEditModalOpen(false);
         setSelectedRow(null);
-    };
-
-    const handleEdit = (editedData) => {
-        // Implement your edit logic here, e.g., update the data in the products array
-        // Make sure to update the state with the edited data
-        // For this example, we'll log the edited data
-        console.log('Edited Data:', editedData);
-
-        // Close the edit modal
-        closeEditModal();
     };
 
     return (
@@ -80,11 +71,11 @@ function Home() {
             <Grid
                 data={products}
                 columns={columnNames}
-                multiValueCols={['Developers']}
+                multiValueCols={['developers']}
                 onEditClick={openEditModal} /* Pass the openEditModal function */
             />
-            {/* Render the add product modal when isModalOpen is true */}
-            {isModalOpen && (
+            {/* Render the add product modal when isAddModalOpen is true */}
+            {isAddModalOpen && (
                 <div className='modal-overlay'>
                     <div className='modal-content'>
                         <div>
@@ -95,14 +86,14 @@ function Home() {
                 </div>
             )}
 
-            {/* Render the edit product modal when isEditOpen is true */}
-            {isEditOpen && (
+            {/* Render the edit product modal when isEditModalOpen is true */}
+            {isEditModalOpen && (
                 <div className='modal-overlay'>
                     <div className='modal-content'>
                         <EditProductForm
                             productData={selectedRow}
-                            onSave={handleEdit}
-                            onClose={closeEditModal}
+                            fetchProductData={fetchProductData}
+                            closeModal={closeEditModal} 
                         />
                     </div>
                 </div>

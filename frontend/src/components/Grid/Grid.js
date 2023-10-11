@@ -10,7 +10,7 @@ function Grid({ data, columns, multiValueCols, onEditClick }) {
             {columns.map((column, index) => (
               <th key={index}>{column}</th>
             ))}
-            <th>Edit</th> {/* Add a new column for the Edit button */}
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
