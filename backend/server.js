@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors'); // Import the 'cors' middleware
 const app = express();
+const healthRoute = require('./src/routes/health');
 const productsRoute = require('./src/routes/products');
 const productRoute = require('./src/routes/product');
 
@@ -11,6 +12,7 @@ const setupSwagger = require('./src/swagger/swagger.js'); // Replace with the co
 app.use(express.json());
 app.use(cors());
 
+app.use('/api', healthRoute);
 app.use('/api', productsRoute);
 app.use('/api', productRoute);
 
