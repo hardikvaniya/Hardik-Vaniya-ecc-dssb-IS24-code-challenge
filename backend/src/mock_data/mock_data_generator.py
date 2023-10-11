@@ -27,7 +27,7 @@ for _ in range(product_count):
         "productId": random.choice(product_ids),
         "productName": random.choice(product_names),
         "productOwnerName": random.choice(owner_names),
-        "Developers": random.sample(developer_names, random.randint(1, 10)),
+        "Developers": random.sample(developer_names, random.randint(1, 5)),
         "scrumMasterName": random.choice(scrum_master_names),
         "startDate": random.choice(start_dates),
         "methodology": random.choice(methodologies),
