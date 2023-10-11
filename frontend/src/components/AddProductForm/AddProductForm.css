@@ -1,85 +1,50 @@
-/* Center the form on the page */
-.form-container {
+/* Style the AddProductForm container */
+form {
+    width: 100%;
+    max-width: 400px; /* Adjust the maximum width as needed */
+    margin: 0 auto;
+}
+
+/* Add space between input fields */
+div {
+    margin-bottom: 4px;
+}
+
+/* Style the "Add Developer" button */
+.Button-add-developer {
+    font-size: 14px; /* Smaller font size */
+    padding: 5px 10px; /* Adjust padding as needed */
+}
+
+/* Align "StartDate" and "Agile" input fields in the same row */
+div.Date-Methodology {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100vh;
-  }
-  
-  /* Style the form */
-  .form {
-    width: 400px;
-    padding: 20px;
-    border: 1px solid #ccc;
+}
+
+/* Style the "Submit" and "Close" buttons */
+Button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
-    background: #f7f7f7;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-  }
-  
-  /* Style the form heading */
-  .h6 {
-    margin: 0 0 20px;
-  }
-  
-  /* Style input fields and labels */
-  .input,
-  .select {
-    width: 100%;
-    margin: 8px 0;
-  }
-  
-  /* Style error messages */
-  .Mui-error {
-    color: #f44336;
-  }
-  
-  /* Style the submit button */
-  .button[type="submit"] {
-    width: 100%;
-    margin: 20px 0;
-  }
-  
-  /* Center align the select dropdown */
-  .MuiFormControl-root {
-    width: 100%;
-  }
-  
-  /* Add space between developer input fields */
-  .MuiFormControl-root:not(:last-child) {
-    margin-bottom: 10px;
-  }
-  
-  /* Style checkboxes */
-  .MuiFormGroup-root {
-    margin-bottom: 10px;
-  }
-  
-  /* Style location input field */
-  .MuiInputLabel-root.MuiInputLabel-shrink {
-    margin-top: -15px;
-  }
-  
-  /* Style Methodology dropdown */
-  .MuiSelect-select.MuiSelect-select {
-    padding: 12px;
-  }
-  
-  /* Style the delete icon and its container */
-  .MuiIconButton-root {
-    padding: 2px; /* Adjust the padding for the delete icon */
-    width: 10px; /* Adjust the width of the container */
-    height: 10px; /* Adjust the height of the container */
-  }
-  
-  /* Style the developer input field */
-  .MuiInput-root {
-    display: block; /* Display the input field as a block element */
-  }
-  
-  /* Style the delete icon */
-  .MuiSvgIcon-root {
-    width: 0.6em; /* Adjust the width of the delete icon */
-    height: 0.6em; /* Adjust the height of the delete icon */
-  }
-  
+    cursor: pointer;
+    font-size: 16px;
+}
+
+Button.Button-close {
+    background-color: #ccc;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Apply styles to the "Agile" select input */
+FormControl {
+    width: 100%; /* Full width */
+}

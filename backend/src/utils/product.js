@@ -32,7 +32,7 @@ function addProductToFile(productName, productOwnerName, developers, scrumMaster
     // Write the updated data back to the JSON file
     writeProductsToFile(data);
 
-    return data;
+    return newProduct;
 }
 
 function updateProductInFile(productId, updatedFields) {

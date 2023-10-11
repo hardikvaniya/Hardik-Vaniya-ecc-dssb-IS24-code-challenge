@@ -12,27 +12,28 @@ function Home() {
     const [selectedRow, setSelectedRow] = useState(null); // Store the selected row data
     const [isEditOpen, setEditOpen] = useState(false); // State to control the edit modal visibility
 
-    React.useEffect(() => {
-        async function fetchProductData() {
-            try {
-                const data = await fetchData();
+    async function fetchProductData() {
+        try {
+            const data = await fetchData();
 
-                if (data) {
-                    if (Array.isArray(data) && data.length > 0) {
-                        const firstProduct = data[0];
-                        const columns = Object.keys(firstProduct);
-                        setColumnNames(columns);
-                        setProducts(data);
-                    } else {
-                        console.error('Data is not an array or is empty.');
-                    }
+            if (data) {
+                if (Array.isArray(data) && data.length > 0) {
+                    const firstProduct = data[0];
+                    const columns = Object.keys(firstProduct);
+                    setColumnNames(columns);
+                    setProducts(data);
                 } else {
-                    console.error('Data retrieval failed.');
+                    console.error('Data is not an array or is empty.');
                 }
-            } catch (error) {
-                console.error('Error fetching data:', error.message);
+            } else {
+                console.error('Data retrieval failed.');
             }
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
         }
+    }
+
+    React.useEffect(() => {    
         console.log('Fetching data...');
         fetchProductData();
     }, []);
@@ -87,7 +88,7 @@ function Home() {
                 <div className='modal-overlay'>
                     <div className='modal-content'>
                         <div>
-                            <AddProductForm />
+                            <AddProductForm closeModal={closeModal} fetchProductData={fetchProductData}/>
                         </div>
                         <button onClick={closeModal}>Close</button>
                     </div>

@@ -15,8 +15,3 @@ export async function fetchData() {
       return null; // Return null or handle the error as needed
     }
 }
-  
-// export function someOtherFunction() {
-//     // Define another function
-// }
-  

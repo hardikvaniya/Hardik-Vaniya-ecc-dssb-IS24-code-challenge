@@ -86,13 +86,12 @@ router.post('/product', (req, res) => {
 
     // Add the product to the database and wrap it in try/catch in case of errors
     try {
-        addProductToFile(productName, productOwnerName, developers, scrumMasterName, startDate, methodology, location);
+        const newProduct = addProductToFile(productName, productOwnerName, developers, scrumMasterName, startDate, methodology, location);
+        res.status(201).json({ message: 'Product created successfully', newProduct });
     } catch (error) {
         console.error('Error adding product:', error);
         return res.status(500).json({ error: 'Error adding product to the database' });
     }
-
-    res.status(201).json({ message: 'Product created successfully' });
 });
 
 

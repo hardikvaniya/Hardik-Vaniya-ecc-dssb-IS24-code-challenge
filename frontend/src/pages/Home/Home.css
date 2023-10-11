@@ -19,6 +19,7 @@
 .add-product-button:hover {
     background-color: #0056b3; /* Hover background color */
 }
+
 /* Style the modal overlay */
 .modal-overlay {
     position: fixed;
@@ -39,7 +40,10 @@
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    min-height: 100%;
+    max-height: 80%; /* Set a maximum height for the modal */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds the max height */
+    width: 90%;
+    max-width: 500px;
 }
 
 /* Style the close button */
@@ -51,5 +55,4 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px; /* Increase the top margin for spacing */
 }
