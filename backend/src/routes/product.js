@@ -1,7 +1,5 @@
-const fs = require('fs');
 const express = require('express');
-const path = require('path');
-const { addProductToFile, updateProductInFile } = require('./../utils/product.js'); 
+const { addProductToFile, updateProductInFile } = require('./../utils/products.js'); 
 const router = express.Router();
 
 /**
