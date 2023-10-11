@@ -1,45 +1,15 @@
 const fs = require('fs');
 const express = require('express');
 const path = require('path');
+const {addProductToFile} = require('./../utils/product.js'); 
 const router = express.Router();
 
-function addProductToFile(productName, productOwnerName, developers, scrumMasterName, startDate, methodology, location) {
-    // Read the existing data from the JSON file
-    const filePath = path.join(__dirname, '../mock_data/products.json');
-    const rawData = fs.readFileSync(filePath);
-    const data = JSON.parse(rawData);
-
-    // Find the highest existing productId
-    let highestProductId = 0;
-    for (const product of data) {
-        if (product.productId > highestProductId) {
-            highestProductId = product.productId;
-        }
-    }
-
-    // Increment the highest productId by one to create a new productId
-    const newProductId = highestProductId + 1;
-
-    // Create a new product object with the provided values
-    const newProduct = {
-        productId: newProductId,
-        productName,
-        productOwnerName,
-        developers,
-        scrumMasterName,
-        startDate,
-        methodology,
-        location,
-    };
-
-    // Add the new product to the existing data
-    data.push(newProduct);
-
-    // Write the updated data back to the JSON file
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-    return data;
-}
+/**
+ * @swagger
+ * tags:
+ *   name: Product
+ *   description: Manage single product APIs
+ */
 
 /**
  * @swagger
@@ -47,6 +17,7 @@ function addProductToFile(productName, productOwnerName, developers, scrumMaster
  *   post:
  *     summary: Create a new product
  *     description: Add a new product to the database.
+ *     tags: [Product]  # Assign the endpoint to the "Product" tag
  *     requestBody:
  *       required: true
  *       content:

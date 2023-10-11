@@ -4,10 +4,19 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Products
+ *   description: APIs to manage products in bulk
+ */
+
+
+/**
+ * @swagger
  * /api/products:
  *   get:
  *     summary: Get a list of products
  *     description: Retrieve a list of products from the database.
+ *     tags: [Products]  # Assign the endpoint to the "Products" tag
  *     responses:
  *       '200':
  *         description: A successful response with a list of products.
