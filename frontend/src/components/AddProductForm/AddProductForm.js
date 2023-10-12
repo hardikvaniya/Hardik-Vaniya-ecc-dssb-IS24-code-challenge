@@ -1,184 +1,266 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-    TextField,
-    Button,
-    Select,
-    MenuItem,
-    FormControl,
-    IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { addProduct } from '../../apis/product'; 
-import './AddProductForm.css'; // Import your CSS file
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  IconButton,
+  Grid,
+  Container,
+  Typography,
+} from "@mui/material";
+import Delete from "@mui/icons-material/Delete";
+import CloseModal from "@mui/icons-material/Close";
+import { addProduct, updateProduct } from "../../apis/product";
 
-const AddProductForm = ({ closeModal, fetchProductData }) => {
-    const [formData, setFormData] = useState({
-        productName: '',
-        productOwnerName: '',
-        developers: [''],
-        scrumMasterName: '',
-        startDate: '',
-        methodology: 'Agile',
-        location: '',
-    });
+const AddProductForm = ({ closeModal, fetchProductData, data }) => {
+  const [formData, setFormData] = useState({
+    productName: "",
+    productOwnerName: "",
+    developers: [""],
+    scrumMasterName: "",
+    startDate: "",
+    methodology: "Agile",
+    location: "",
+  });
+  const [formErrors, setFormErrors] = useState({
+    productName: false,
+    productOwnerName: false,
+    developers: [],
+    scrumMasterName: false,
+    startDate: false,
+    location: false,
+  });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    }
+  }, [data]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Reset the error for the field on change
+    setFormErrors({ ...formErrors, [name]: false });
+  };
+
+  const addDeveloperField = () => {
+    if (formData.developers.length < 5) {
+      setFormData({ ...formData, developers: [...formData.developers, ""] });
+    }
+  };
+
+  const removeDeveloperField = (index) => {
+    if (formData.developers?.length <= 1) return;
+    const newDevelopers = [...formData.developers];
+    newDevelopers.splice(index, 1);
+    setFormData({ ...formData, developers: newDevelopers });
+  };
+
+  const handleSubmit = async () => {
+    const errors = validateForm(formData);
+    if (hasErrors(errors)) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
+      let result;
+      if (formData?.productId) {
+        result = await updateProduct(formData?.productId, formData);
+      } else {
+        result = await addProduct(formData);
+      }
+
+      if (result) {
+        fetchProductData();
+        closeModal();
+        alert("Product added successfully!");
+      } else {
+        console.error("Product addition failed.");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error.message);
+    }
+  };
+
+  const hasErrors = (errors) => {
+    return Object.values(errors).some((error) => error);
+  };
+
+  const validateForm = (data) => {
+    const errors = {
+      productName: data.productName === "",
+      productOwnerName: data.productOwnerName === "",
+      developers: data.developers.some((developer) => developer === ""),
+      scrumMasterName: data.scrumMasterName === "",
+      startDate: data.startDate === "",
+      location: data.location === "",
     };
 
-    const addDeveloperField = () => {
-        if (formData.developers.length < 5) {
-            setFormData({ ...formData, developers: [...formData.developers, ''] });
-        }
-    };
+    return errors;
+  };
 
-    const removeDeveloperField = (index) => {
-        const newDevelopers = [...formData.developers];
-        newDevelopers.splice(index, 1);
-        setFormData({ ...formData, developers: newDevelopers });
-    };
+  return (
+    <Container>
+      <Grid container justifyContent={"space-between"}>
+        <Grid item xs={2}>
+          <IconButton onClick={closeModal}>
+            <CloseModal />
+          </IconButton>
+        </Grid>
+        <Grid item xs mb={2}>
+          <Typography variant="h4">Add Product</Typography>
+        </Grid>
+        <Grid item xs={2}></Grid>
+      </Grid>
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            // Call the addProduct function with the formData
-            const result = await addProduct(formData);
-    
-            if (result) {
-                // If the product was added successfully, you can handle the result
-                // You can display a success message or navigate to a different page
-                console.log('Product added successfully:', result);
+      <Grid
+        container
+        justifyContent={"center"}
+        spacing={2}
+        alignItems="stretch"
+        xs={12}
+      >
+        <Grid item xs={12}>
+          <TextField
+            label="Product Name"
+            name="productName"
+            value={formData.productName}
+            onChange={handleChange}
+            required
+            error={formErrors.productName}
+            fullWidth
+          />
+        </Grid>
 
-                // Fetch the updated product data
-                fetchProductData();
+        <Grid item xs={12}>
+          <TextField
+            label="Product Owner Name"
+            name="productOwnerName"
+            value={formData.productOwnerName}
+            onChange={handleChange}
+            required
+            error={formErrors.productOwnerName}
+            fullWidth
+          />
+        </Grid>
 
-                // Call the closeModal function to close the modal
-                closeModal();
-
-                alert('Product added successfully!')
-            } else {
-                // Handle the case where adding the product failed
-                console.error('Product addition failed.');
-            }
-        } catch (error) {
-            console.error('Error adding product:', error.message);
-        }
-    };
-    
-    return (
-        <form onSubmit={handleSubmit}>
-            <h2>Add Product</h2>
-            <div>
-                <TextField
-                    label="Product Name"
-                    name="productName"
-                    value={formData.productName}
-                    onChange={handleChange}
+        <Grid item xs={12}>
+          <Grid container mb={2} spacing={2}>
+            {formData.developers.map((developer, index) => (
+              <Grid
+                item
+                key={index}
+                xs={12}
+                style={{ display: "flex", alignItems: "center", gap: 4 }}
+              >
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label={`Developer ${index + 1}`}
+                    value={developer}
+                    onChange={(e) => {
+                      const newDevelopers = [...formData.developers];
+                      newDevelopers[index] = e.target.value;
+                      setFormData({ ...formData, developers: newDevelopers });
+                    }}
                     required
-                />
-            </div>
-
-            <div>
-                <TextField
-                    label="Product Owner Name"
-                    name="productOwnerName"
-                    value={formData.productOwnerName}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div>
-                <div style={{ display: 'flex' }}>
-                    {formData.developers.map((developer, index) => (
-                        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                            <TextField
-                                label={`Developer ${index + 1}`}
-                                value={developer}
-                                onChange={(e) => {
-                                    const newDevelopers = [...formData.developers];
-                                    newDevelopers[index] = e.target.value;
-                                    setFormData({ ...formData, developers: newDevelopers });
-                                }}
-                                required
-                            />
-                            {formData.developers.length > 1 && (
-                                <IconButton
-                                    onClick={() => removeDeveloperField(index)}
-                                    style={{
-                                        alignSelf: 'flex-start',
-                                        marginLeft: '5px',
-                                    }}
-                                >
-                                    <CloseIcon color="error" style={{ fontSize: '16px' }} />
-                                </IconButton>
-                            )}
-                        </div>
-                    ))}
-                </div>
-                {formData.developers.length < 5 && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={addDeveloperField}
+                    error={formErrors.developers[index]}
+                  />
+                </Grid>
+                {formData.developers?.length > 1 && (
+                  <Grid item>
+                    <IconButton
+                      aria-label="delete"
+                      size="large"
+                      onClick={() => removeDeveloperField(index)}
                     >
-                        Add Developer
-                    </Button>
+                      <Delete fontSize="inherit" />
+                    </IconButton>
+                  </Grid>
                 )}
-            </div>
-
-            <div>
-                <TextField
-                    label="Scrum Master Name"
-                    name="scrumMasterName"
-                    value={formData.scrumMasterName}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div>
-                <TextField
-                    label="Start Date"
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                    InputLabelProps={{ shrink: true }}
-                    required
-                />
-            </div>
-
-            <div>
-                <FormControl>
-                    <Select
-                        name="methodology"
-                        value={formData.methodology}
-                        onChange={handleChange}
-                        required
-                    >
-                        <MenuItem value="Agile">Agile</MenuItem>
-                        <MenuItem value="Waterfall">Waterfall</MenuItem>
-                    </Select>
-                </FormControl>
-            </div>
-
-            <div>
-                <TextField
-                    label="Location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <Button variant="contained" color="primary" type="submit">
-                Submit
+              </Grid>
+            ))}
+          </Grid>
+          {formData.developers.length < 5 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addDeveloperField}
+            >
+              Add Developer
             </Button>
-        </form>
-    );
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Scrum Master Name"
+            name="scrumMasterName"
+            value={formData.scrumMasterName}
+            onChange={handleChange}
+            required
+            error={formErrors.scrumMasterName}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Start Date"
+            type="date"
+            name="startDate"
+            value={formData.startDate}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+            required
+            error={formErrors.startDate}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <FormControl fullWidth>
+            <Select
+              name="methodology"
+              value={formData.methodology}
+              onChange={handleChange}
+              required
+            >
+              <MenuItem value="Agile">Agile</MenuItem>
+              <MenuItem value="Waterfall">Waterfall</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Location"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+            error={formErrors.location}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Button
+            onClick={() => handleSubmit()}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
+  );
 };
 
 export default AddProductForm;

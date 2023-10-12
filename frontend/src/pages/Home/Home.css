@@ -2,13 +2,33 @@
     height: 150px;
     position: relative;
 }
+/* Style for the title */
+.title {
+    text-align: center; /* Center-align the text */
+    margin: 20px 0;
+    background-color: #1061b7; /* Set background color to blue */
+    color: white; /* Set text color to white */
+    padding: 10px; /* Add some padding to the title for better styling */
+}
+
+.title h1 {
+    font-size: 24px; /* Adjust font size as needed */
+    margin: 0; /* Remove default margin */
+}
+
+.title p {
+    font-size: 20px; /* Adjust font size as needed */
+    margin: 0; /* Remove default margin */
+    color: rgb(255, 255, 1); /* Set text color to yellow */
+}
+
 
 .add-product-button {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background-color: #007bff; /* Button background color */
-    color: white; /* Button text color */
+    background-color: #f7e118; /* Button background color */
+    color: rgb(11, 58, 187); /* Button text color */
     padding: 10px 20px; /* Adjust padding as needed */
     border: none;
     border-radius: 5px;
@@ -55,4 +75,41 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 4px;
+}
+
+.product-counter {
+    font-size: 15px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: -5px;
+}
+.search-button {
+    background-color: #f7e118;
+    color: rgb(5, 0, 0);
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    margin-left: 10px; /* Adjust the margin as needed */
+}
+
+.search-button:hover {
+    background-color: #579ce4;
+}
+/* Style for the search input fields */
+.search-bar input {
+    padding: 10px;
+    margin-right: 10px;
+    border: 2px solid #458be0;
+    border-radius: 5px;
+    font-size: 10px;
+    width: 250px;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-top: -10px; /* Add margin-top to move the search bar up */
 }

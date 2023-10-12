@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { updateProduct } from '../../apis/product';
+import './EditProductForm.css';
 
 function EditProductForm({ productData, fetchProductData, closeModal }) {
     const [editedData, setEditedData] = useState({ ...productData });
@@ -14,6 +15,7 @@ function EditProductForm({ productData, fetchProductData, closeModal }) {
                 // Edit an existing developer name
                 updatedDevelopers[index] = value;
             } else if (updatedDevelopers.length < 5) {
+                
                 // Add a new developer name if there are less than 5
                 updatedDevelopers.push(value);
             }
@@ -29,7 +31,7 @@ function EditProductForm({ productData, fetchProductData, closeModal }) {
             }));
         }
     };
-
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

@@ -1,5 +1,5 @@
-import React from 'react';
-import './Grid.css';
+import React from "react";
+import "./Grid.css";
 
 function Grid({ data, columns, multiValueCols, onEditClick }) {
   return (
@@ -8,9 +8,22 @@ function Grid({ data, columns, multiValueCols, onEditClick }) {
         <thead>
           <tr>
             {columns.map((column, index) => (
-              <th key={index}>{column}</th>
+              <th key={index}>
+                {column?.toUpperCase() === "SCRUMMASTERNAME"
+                  ? "SCRUM MASTER NAME"
+                  : column?.toUpperCase() === "PRODUCTOWNERNAME"
+                  ? "PRODUCT OWNER NAME"
+                  : column?.toUpperCase() === "PRODUCTNAME"
+                  ? "PRODUCT NAME"
+                  : column?.toUpperCase() === "STARTDATE"
+                  ? "START DATE"
+                  : column?.toUpperCase() === "PRODUCTID"
+                  ? "PRODUCT ID"
+                  : column?.toUpperCase() 
+                  }
+              </th>
             ))}
-            <th>Edit</th>
+            <th>EDIT</th>
           </tr>
         </thead>
         <tbody>
@@ -30,9 +43,7 @@ function Grid({ data, columns, multiValueCols, onEditClick }) {
                     </td>
                   );
                 } else {
-                  return (
-                    <td key={columnIndex}>{row[column]}</td>
-                  );
+                  return <td key={columnIndex}>{row[column]}</td>;
                 }
               })}
               <td>
