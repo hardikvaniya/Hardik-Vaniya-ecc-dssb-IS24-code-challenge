@@ -44,3 +44,27 @@ export async function updateProduct(productId, updatedData) {
         console.error('Error updating product:', error.message);
     }
 }
+
+export async function deleteProduct(productId) {
+    const url = `http://localhost:5000/api/product/${productId}`;
+
+    // Make a DELETE request and handle errors using the try/catch block
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error deleting product:', error.message);
+    }
+}
+

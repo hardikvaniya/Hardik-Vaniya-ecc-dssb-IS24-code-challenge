@@ -2,7 +2,7 @@
 
 .grid-container {
     overflow-x: auto;
-    max-height: calc(100vh - 180px); /* Adjust the 230px to match your header/footer height */
+    max-height: calc(100vh - 210px); /* Adjust the 230px to match your header/footer height */
 }
 
 .grid-table {
@@ -26,6 +26,11 @@
     position: sticky;
     top: 0; /* Stick the <thead> to the top of the container */
     z-index: 0; /* Ensure it's above the table body */
+}
+
+.grid-table button {
+    margin: 5px;
+    font-size: 16px;
 }
 
 /* Style the multi-value cells */

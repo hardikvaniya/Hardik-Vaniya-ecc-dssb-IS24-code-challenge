@@ -14,7 +14,7 @@ const router = express.Router();
  * /api/products/search:
  *   get:
  *     summary: Search for products
- *     description: Search for products based on the provided criteria.
+ *     description: Search for products based on the provided criteria. If no criteria are provided, all products are returned.
  *     tags: [Search]  # Assign the endpoint to the "Products" tag
  *     parameters:
  *       - in: query

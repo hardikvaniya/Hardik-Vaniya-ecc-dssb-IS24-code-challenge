@@ -29,6 +29,12 @@ function writeProductsToFile(data) {
     writeJsonFile(JSON_FILE_PATH, data);
 }
 
+function isValidURL(url) {
+  // Regular expression pattern for a simple URL validation
+  const urlPattern = /^(https?:\/\/[^\s/$.?#].[^\s]*)$/;
+  return urlPattern.test(url);
+}
+
 function getAllProducts() {
   // Define the path to the product.json file
   const productFilePath = path.join(__dirname, '..', 'mock_data', 'products.json');
@@ -104,11 +110,34 @@ function updateProductInFile(productId, updatedFields) {
   return data[productIndex];
 }
 
+function deleteProductFromFile(productId) {
+  const data = readProductsFromFile();
+
+  // Find the index of the product by productId
+  const productIndex = data.findIndex((product) => product.productId === productId);
+
+  if (productIndex === -1) {
+    // If the product doesn't exist, return null to indicate it was not found
+    return null;
+  }
+
+  // Remove the product from the array
+  data.splice(productIndex, 1);
+
+  // Write the updated data back to the JSON file
+  writeProductsToFile(data);
+
+  // Return the deleted product (optional)
+  return data[productIndex];
+}
+
 
 module.exports = {
+    isValidURL,
     getAllProducts,
     readProductsFromFile,
     writeProductsToFile,
     addProductToFile,
-    updateProductInFile
+    updateProductInFile,
+    deleteProductFromFile
 };

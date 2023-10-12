@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Grid from "../../components/Grid/Grid"; // Import the Grid component
-import { fetchData } from "../../apis/products";
+import { searchProducts } from "../../apis/products";
 import "./Home.css"; // Import any styles for your Home component
 import AddProductForm from "../../components/AddProductForm/AddProductForm";
-import EditProductForm from "../../components/EditProductForm/EditProductForm";
+import { deleteProduct } from "../../apis/product";
 
 function Home() {
   const [products, setProducts] = useState([]);
   const [columnNames, setColumnNames] = useState([]);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null); // Store the selected row data
-  const [isEditModalOpen, setEditModalOpen] = useState(false); // State to control the edit modal visibility
   const [developerNameSearch, setDeveloperNameSearch] = useState("");
   const [scrumMasterNameSearch, setScrumMasterNameSearch] = useState("");
 
-  async function fetchProductData() {
+  const fetchProductData = useCallback(async () => {
     try {
-      const data = await fetchData();
+      const data = await searchProducts(developerNameSearch, scrumMasterNameSearch);
 
       if (data) {
         if (Array.isArray(data) && data.length > 0) {
@@ -25,6 +24,7 @@ function Home() {
           setColumnNames(columns);
           setProducts(data);
         } else {
+          console.log(data);
           console.error("Data is not an array or is empty.");
         }
       } else {
@@ -33,14 +33,13 @@ function Home() {
     } catch (error) {
       console.error("Error fetching data:", error.message);
     }
-  }
+  }, [developerNameSearch, scrumMasterNameSearch]);
 
-  React.useEffect(() => {
+
+  useEffect(() => {
     console.log("Fetching data...");
-    fetchProductData();
-  }, []);
-
-//  
+    fetchProductData()
+  }, [fetchProductData]);
 
   // Function to open the add product modal
   const openAddModal = () => {
@@ -51,7 +50,6 @@ function Home() {
   const closeModal = () => {
     setSelectedRow(null);
     setAddModalOpen(false);
-    setEditModalOpen(false);
   };
 
   // Function to open the edit modal
@@ -59,9 +57,18 @@ function Home() {
     setSelectedRow(row);
     setAddModalOpen(true);
   };
-  const performSearch = () => {
-    // want to call routes/search.js
+
+  // Function to open the edit modal
+  const onDeleteClick = async (row) => {
+    await deleteProduct(row.productId);
+    await fetchProductData();
+    alert(row.productName + " deleted Successfully.")
   };
+  
+  const performSearch = () => {
+    fetchProductData()
+  };
+
   return (
     <div>
       <div className="summary">
@@ -88,7 +95,7 @@ function Home() {
           </button>
         </div>
         <div className="product-counter">
-          <p>TOTAL PRODUCTS: {products.length}</p>
+          <h2>TOTAL PRODUCTS: {products.length}</h2>
         </div>
         <button className="add-product-button" onClick={openAddModal}>
           Add Product
@@ -99,7 +106,8 @@ function Home() {
         data={products}
         columns={columnNames}
         multiValueCols={["developers"]}
-        onEditClick={openEditModal} /* Pass the openEditModal function */
+        onEditClick={openEditModal}
+        onDeleteClick={onDeleteClick}
       />
       {/* Render the add product modal when isAddModalOpen is true */}
       {isAddModalOpen && (
@@ -110,22 +118,9 @@ function Home() {
                 closeModal={closeModal}
                 fetchProductData={fetchProductData}
                 data={selectedRow}
+                isNewProduct={selectedRow === null}
               />
             </div>
-            {/* <button onClick={closeModal}>Close</button> */}
-          </div>
-        </div>
-      )}
-
-      {/* Render the edit product modal when isEditModalOpen is true */}
-      {isEditModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <EditProductForm
-              productData={selectedRow}
-              fetchProductData={fetchProductData}
-              closeModal={closeModal}
-            />
           </div>
         </div>
       )}

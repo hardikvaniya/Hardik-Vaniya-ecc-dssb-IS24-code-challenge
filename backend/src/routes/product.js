@@ -1,5 +1,5 @@
 const express = require('express');
-const { addProductToFile, updateProductInFile } = require('./../utils/products.js'); 
+const { isValidURL, addProductToFile, updateProductInFile, deleteProductFromFile } = require('./../utils/products.js'); 
 const router = express.Router();
 
 /**
@@ -82,6 +82,14 @@ router.post('/product', (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    if (methodology.toLowerCase() !== 'agile' && methodology.toLowerCase() !== 'waterfall') {
+        return res.status(400).json({ error: 'Invalid methodology. It should be either Agile or Waterfall.' });
+    }
+
+    if (!isValidURL(location)) {
+        return res.status(400).json({ error: 'Invalid location. It should be a valid URL.' });
+    }
+
     // Add the product to the database and wrap it in try/catch in case of errors
     try {
         const newProduct = addProductToFile(productName, productOwnerName, developers, scrumMasterName, startDate, methodology, location);
@@ -98,7 +106,7 @@ router.post('/product', (req, res) => {
  * /api/product/{productId}:
  *   put:
  *     summary: Update a product by productId
- *     description: Update an existing product in the database by productId.
+ *     description: Update an existing product in the database by productId. Pass only the fields that need to be updated in the request body.
  *     tags: [Product]
  *     parameters:
  *       - in: path
@@ -175,6 +183,48 @@ router.put('/product/:productId', (req, res) => {
     } catch (error) {
         console.error('Error updating product:', error);
         return res.status(500).json({ error: 'Error updating product in the database' });
+    }
+});
+
+/**
+ * @swagger
+ * /api/product/{productId}:
+ *   delete:
+ *     summary: Delete a product by productId
+ *     description: Delete an existing product in the database by productId.
+ *     tags: [Product]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the product to be deleted, passed in the URL.
+ *     responses:
+ *       '200':
+ *         description: Product deleted successfully.
+ *       '404':
+ *         description: Product not found.
+ *       '500':
+ *         description: Error deleting the product from the database.
+ */
+router.delete('/product/:productId', async (req, res) => {
+    // Get the productId from the request parameters
+    const productId = parseInt(req.params.productId);
+
+    // Delete the product from the database and wrap it in try/catch in case of errors
+    try {
+        const deletedProduct = deleteProductFromFile(productId);
+
+        if (deletedProduct === null) {
+            // Product not found
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        return res.status(500).json({ error: 'Unable to delete from the database' });
     }
 });
 

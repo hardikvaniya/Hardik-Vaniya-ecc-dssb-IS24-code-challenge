@@ -1,8 +1,6 @@
-// dataFetcher.js
-
-export async function fetchData() {
+export async function searchProducts(developer, scrumMaster) {
     try {
-      const response = await fetch('http://localhost:5000/api/products/search');
+      const response = await fetch(`http://localhost:5000/api/products/search?developer=${developer}&scrum_master=${scrumMaster}`);
   
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
